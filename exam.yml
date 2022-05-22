@@ -1,0 +1,432 @@
+openapi: "3.0.2"
+
+info:
+  title: API for bachelor project
+  description: Optional multiline or single-line description in [CommonMark](http://commonmark.org/help/) or HTML.
+  version: 0.1.9
+
+
+paths:
+  /api/get-exam-schedule:
+    get:
+      tags:
+        - Exam
+
+      operationId: Get exam schedule
+      description: Получить расписание экзаменов
+
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    group:
+                      type: string
+                      description: Название учебной группы
+                    exams:
+                      type: array
+                      description: Экзамены этой группы
+                      items:
+                        type: object
+                        properties:
+                          subject:
+                            type: string
+                            description: Учебная дисциплина
+                          exams:
+                            type: array
+                            description: Экзамены по этой дисциплине
+                            items:
+                              type: object
+                              properties:
+                                id:
+                                  type: integer
+                                  description: ID экзамена
+                                type: 
+                                  type: string
+                                  description: Тип экзамена
+                                start_time:
+                                  type: string
+                                  format: datetime
+                                  description: Время начала экзамена
+                                end_time:
+                                  type: string
+                                  format: datetime
+                                  description: Время конца экзамена
+                                registration_start_time:
+                                  type: string
+                                  format: datetime
+                                  description: Время открытия записи на экзамен
+                                registration_end_time:
+                                  type: string
+                                  format: datetime
+                                  description: Время закрытия записи на экзамен
+                                capacity:
+                                  type: integer
+                                  description: Максимально допустимое количество человек на экзамене
+                                registered:
+                                  type: integer
+                                  description: Количество уже записавшихся на экзамен человек
+                                link:
+                                  type: string
+                                  description: Ссылка на экзамен (если проводится в дистанционном формате)
+                                room:
+                                  type: string
+                                  description: Аудитория
+                                max_points:
+                                  type: integer
+                                  description: Максимальеый балл
+                                pass_points:
+                                  type: integer
+                                  description: Проходной балл
+                                description:
+                                  type: string
+                                  description: Описание
+                                examiners:
+                                  type: array
+                                  description: Экзаменаторы
+                                  items:
+                                    link:
+                                      type: string
+                                      description: Ссылка
+                                    first_name:
+                                      type: string
+                                      description: Имя
+                                    middle_name:
+                                      type: string
+                                      description: Отчество
+                                    last_name:
+                                      type: string
+                                      description: Фамилия
+
+        '400':
+          description: Ошибка
+
+        '401':
+          description: Пользователь не авторизован
+
+        '403':
+          description: Доступ запрещён
+
+        '500':
+          description: Внутренняя ошибка сервера
+
+  /api/set-exam-schedule:
+    post:
+      tags:
+        - Exam
+      operationId: Set exam schedule
+      description: Записаться на экзамен
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                exam_schedule_id:
+                  type: integer
+                  description: ID экзамена
+
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user_to_exam_schedule_id:
+                    type: integer
+                    description: ID записи пользователя на экзамен
+
+        '400':
+          description: Ошибка
+
+        '401':
+          description: Пользователь не авторизован
+
+        '403':
+          description: Доступ запрещён
+
+        '500':
+          description: Внутренняя ошибка сервера
+
+  /api/delete-exam-schedule:
+    delete:
+      tags:
+        - Exam
+      operationId: Delete exam schedule
+      description: Отменить запись на экзамен
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_to_exam_schedule_id:
+                  type: integer
+                  description: ID записи пользователя на экзамен
+    
+      responses:
+        '200':
+          description: Успех
+
+        '400':
+          description: Ошибка
+
+        '401':
+          description: Пользователь не авторизован
+
+        '403':
+          description: Доступ запрещён
+
+        '500':
+          description: Внутренняя ошибка сервера
+
+
+  /api/get-examiner-schedule:
+    get:
+      tags:
+        - Exam
+      operationId: Get examiner schedule
+      description: Получить расписание экзаменов для приёма
+  
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    tutor_id:
+                      type: integer
+                      description: ID преподавателя
+                    occupation:
+                      type: string
+                      description: Должность
+                    exam_schedule_id:
+                      type: integer
+                      description: ID экзамена
+                    type:
+                      type: string
+                      description: Тип экзамена
+                    subject:
+                      type: string
+                      description: Предмет
+                    start_time:
+                      type: string
+                      format: datetime
+                      description: Время начала экзамена
+                    capacity:
+                      type: integer
+                      description: Максимсальное количество человек
+                    registered:
+                      type: integer
+                      description: Количество записавшихся на экзамен
+                    link:
+                      type: string
+                      description: Ссылка
+                    room:
+                      type: string
+                      description: Аудитория
+                    students:
+                      type: array
+                      description: Экзаменуемые
+                      items:
+                        type: object
+                        properties:
+                          user_to_exam_schedule_id:
+                            type: integer
+                            description: ID записи пользователя на экзамен
+                          study_group:
+                            type: string
+                            description: Учебная группа
+                          first_name:
+                            type: string
+                            description: Имя
+                          middle_name:
+                            type: string
+                            description: Отчество
+                          last_name:
+                            type: string
+                            description: Фамилия
+                    examiners:
+                      type: array
+                      description: Экзаменаторы
+                      items:
+                        type: object
+                        properties:
+                          first_name:
+                            type: string
+                            description: Имя
+                          middle_name:
+                            type: string
+                            description: Отчество
+                          last_name:
+                            type: string
+                            description: Фамилия
+                          occupation:
+                            type: string
+                            description: Должность
+                          link:
+                            type: string
+                            description: Ссылка
+                          email:
+                            type: string
+                            description: Адрес электронной почты
+                          room:
+                            type: string
+                            description: Аудитория
+
+        '400':
+          description: Ошибка
+
+        '401':
+          description: Пользователь не авторизован
+
+        '403':
+          description: Доступ запрещён
+
+        '500':
+          description: Внутренняя ошибка сервера
+
+  /api/set-exam-result:
+    post:
+      tags:
+        - Exam
+
+      operationId: Set exam schedule
+      description: Записать результат экзамена
+    
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_to_exam_schedule_id:
+                  type: integer
+                  description: ID записи пользователя на экзамен
+                result:
+                  type: integer
+                  description: Результат
+                comment:
+                  type: string
+                  description: Комментарий к результату
+                absence:  
+                  type: boolean
+                  description: Отметка о неявке
+                tutor_id:
+                  type: integer
+                  description: ID преподавателя
+
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  exam_result_id:
+                    type: integer
+                    description: ID результата экзамена
+                
+        '400':
+          description: Ошибка
+
+        '401':
+          description: Пользователь не авторизован
+
+        '403':
+          description: Доступ запрещён
+
+        '500':
+          description: Внутренняя ошибка сервера
+
+
+  /api/get-exam-result:
+    get:
+      tags:
+        - Exam
+      operationId: Get exam result
+      description: Получить результаты экзаменов
+
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    subject:
+                      type: string
+                      description: Учебная дисциплина
+                    exam_type:
+                      type: string
+                      description: Тип экзамена
+                    start_time:
+                      type: string
+                      format: datetime
+                      description: Время начала
+                    end_time:
+                      type: string
+                      format: datetime
+                      description: Время окончания
+                    room:
+                      type: string
+                      description: Аудитория
+                    link:
+                      type: string
+                      description: Ссылка
+                    max_points:
+                      type: integer
+                      description: Максимальный балл
+                    pass_points:
+                      type: integer
+                      description: Проходной балл
+                    result_points:
+                      type: integer
+                      description: Результат
+                    absence:
+                      type: boolean
+                      description: Отметка о неявке
+                    comment:
+                      type: string
+                      description: Комментарий к результату
+                    examiner:
+                      type: object
+                      description: Экзаменатор
+                      properties:
+                        first_name:
+                          type: string
+                          description: Имя
+                        last_name:
+                          type: string
+                          description: Фамилия
+                        middle_name:
+                          type: string
+                          description: Отчество
+
+
+        '400':
+          description: Ошибка
+
+        '401':
+          description: Пользователь не авторизован
+
+        '403':
+          description: Доступ запрещён
+
+        '500':
+          description: Внутренняя ошибка сервера

@@ -1,0 +1,173 @@
+openapi: "3.0.2"
+
+info:
+  title: API for bachelor project
+  description: Optional multiline or single-line description in [CommonMark](http://commonmark.org/help/) or HTML.
+  version: 0.1.9
+
+paths:
+  /sync/insert:
+    post:
+      tags:
+        - Sync
+      operationId: Insert
+      description: Вставить данные
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                header:
+                  type: string
+                  description: Название шаблона таблицы
+                message:
+                  type: object
+                  description: Данные для вставки
+
+      responses:
+        '200':
+          description: Успех
+
+        '400':
+          description: Ошибка
+
+        '401':
+          description: Пользователь не авторизован
+
+        '403':
+          description: Доступ запрещён
+
+        '404':
+          description: Шаблон не найден
+
+        '500':
+          description: Внутренняя ошибка сервера
+
+
+  /sync/update:
+    post:
+      tags:
+        - Sync
+      operationId: Update
+      description: Вставить данные
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                header:
+                  type: string
+                  description: Название шаблона таблицы
+                message:
+                  type: object
+                  description: Данные для обновления
+
+      responses:
+        '200':
+          description: Успех
+
+        '400':
+          description: Ошибка
+
+        '401':
+          description: Пользователь не авторизован
+
+        '403':
+          description: Доступ запрещён
+
+        '404':
+          description: Шаблон не найден
+
+        '500':
+          description: Внутренняя ошибка сервера
+
+  /sync/write:
+    post:
+      tags:
+        - Sync
+      operationId: Write
+      description: Записать данные
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                header:
+                  type: string
+                  description: Название шаблона таблицы
+                message:
+                  type: object
+                  description: Данные для обновления
+
+      responses:
+        '200':
+          description: Успех
+
+        '400':
+          description: Ошибка
+
+        '401':
+          description: Пользователь не авторизован
+
+        '403':
+          description: Доступ запрещён
+
+        '404':
+          description: Шаблон не найден
+
+        '500':
+          description: Внутренняя ошибка сервера
+
+  /sync/read:
+    get:
+      tags:
+        - Sync
+      operationId: Read
+      description: Прочитать данные
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                header:
+                  type: string
+                  description: Название шаблона таблицы
+                message:
+                  type: object
+                  description: Условия выбора
+
+      responses:
+        '200':
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: array
+                description: Результат 
+
+        '400':
+          description: Ошибка
+
+        '401':
+          description: Пользователь не авторизован
+
+        '403':
+          description: Доступ запрещён
+
+        '404':
+          description: Шаблон не найден
+
+        '500':
+          description: Внутренняя ошибка сервера

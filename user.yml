@@ -1,0 +1,107 @@
+openapi: "3.0.2"
+
+info:
+  title: API for bachelor project
+  description: Optional multiline or single-line description in [CommonMark](http://commonmark.org/help/) or HTML.
+  version: 0.1.9
+
+
+paths:
+  /api/get-user-data:
+    get:
+      tags:
+        - User
+      operationId: Get user data
+      description: Получить регистрационные данные пользователя
+      
+      responses:
+        '200':
+          description: Данные пользователя
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  username:
+                    type: string
+                    description: Логин
+                  first_name:
+                    type: string
+                    description: Имя
+                  middle_name:
+                    type: string
+                    description: Отчество
+                  last_name:
+                    type: string
+                    description: Фамилия
+                  birth_date:
+                    type: string
+                    format: date
+                    description: Дата рождения
+                  phone:
+                    type: string
+                    description: Номер телефона
+
+        '400':
+          description: Ошибка
+
+        '401':
+          description: Пользователь не авторизован
+
+        '403':
+          description: Доступ запрещён
+
+        '500':
+          description: Внутренняя ошибка сервера
+
+  /api/update-user-data:
+    post:
+      tags:
+        - User
+      operationId: Update user data
+      description: Обновить регистрационные данные пользователя
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              description: Новые данные для записи
+              properties:
+                first_name:
+                  type: string
+                  description: Имя
+                middle_name:
+                  type: string
+                  description: Отчество
+                last_name:
+                  type: string
+                  description: Фамилия
+                birth_date:
+                  type: string
+                  format: date
+                  description: Дата рождения
+                phone:
+                  type: string
+                  description: Номер телефона
+                password:
+                  type: string
+                  format: password
+                  description: Хеш пароля
+      
+      responses:
+        '200':
+          description: Данные обновлены
+
+        '400':
+          description: Ошибка
+
+        '401':
+          description: Пользователь не авторизован
+
+        '403':
+          description: Доступ запрещён
+
+        '500':
+          description: Внутренняя ошибка сервера

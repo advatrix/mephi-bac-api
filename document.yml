@@ -1,0 +1,361 @@
+openapi: "3.0.2"
+
+info:
+  title: API for bachelor project
+  description: Optional multiline or single-line description in [CommonMark](http://commonmark.org/help/) or HTML.
+  version: 0.1.9
+
+
+paths:
+  /api/get-documents:
+    get:
+      tags:
+        - Document
+
+      operationId: Get documents
+      description: Получить документы, доступные пользователю
+
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      description: ID документа
+                    name:
+                      type: string
+                      description: Название документа
+                    can_read:
+                      type: boolean
+                      description: Можно читать
+                    can_edit:
+                      type: boolean
+                      description: Можно редактировать содержимое
+                    can_change_status:
+                      type: boolean
+                      description: Можно менять статус
+                    status:
+                      type: string
+                      description: Статус
+
+        '400':
+          description: Ошибка
+
+        '401':
+          description: Пользователь не авторизован
+
+        '403':
+          description: Доступ запрещён
+
+        '500':
+          description: Внутренняя ошибка сервера
+
+
+  /api/get-document-by-id:
+    get:
+      tags:
+        - Document
+      operationId: Get document by id
+      description: Получить документ по его ID
+
+      parameters:
+        - name: id
+          in: query
+          schema:
+            type: integer
+          required: true
+          description: ID документа
+
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    description: Название документа
+                  author:
+                    type: string
+                    description: Автор документа
+                  author_id:
+                    type: string
+                    format: uuid
+                    descritpion: ID автора документа
+                  status:
+                    type: string
+                    description: Статус документа
+                  content:
+                    type: string
+                    description: Содержимое документа
+                  created:
+                    type: string
+                    format: datetime
+                    description: Дата и время создания
+                  updated:
+                    type: string
+                    format: datetime
+                    description: Дата и время последнего обновления
+
+        '400':
+          description: Ошибка
+
+        '401':
+          description: Пользователь не авторизован
+
+        '403':
+          description: Доступ запрещён
+
+        '500':
+          description: Внутренняя ошибка сервера
+
+  /api/create-document:
+    post:
+      tags:
+        - Document
+      operationId: Create document
+      description: Создать документ
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Название документа
+
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    description: ID документа
+                  contents:
+                    type: string
+                    description: Содержимое документа
+
+        '400':
+          description: Ошибка
+
+        '401':
+          description: Пользователь не авторизован
+
+        '403':
+          description: Доступ запрещён
+
+        '500':
+          description: Внутренняя ошибка сервера
+
+  /api/save-document:
+    post:
+      tags:
+        - Document
+      operationId: Create document
+      description: Создать документ
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  description: ID документа
+                document:
+                  type: object
+                  description: Содержимое документа
+                name:
+                  type: string
+                  description: Название документа
+
+      responses:
+        '200':
+          description: Успех
+
+        '400':
+          description: Ошибка
+
+        '401':
+          description: Пользователь не авторизован
+
+        '403':
+          description: Доступ запрещён
+
+        '500':
+          description: Внутренняя ошибка сервера
+
+  /api/send-document:
+    post:
+      tags:
+        - Document
+      operationId: Send document
+      description: Отправить документ на согласование
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                document_id:
+                  type: integer
+                  description: ID документа
+
+      responses:
+        '200':
+          description: Успех
+
+        '400':
+          description: Ошибка
+
+        '401':
+          description: Пользователь не авторизован
+
+        '403':
+          description: Доступ запрещён
+
+        '500':
+          description: Внутренняя ошибка сервера
+
+  /api/approve-document:
+    post:
+      tags:
+        - Document
+      operationId: Approve document
+      description: Одобрить документ
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                document_id:
+                  type: integer
+                  description: ID документа
+
+      responses:
+        '200':
+          description: Успех
+
+        '400':
+          description: Ошибка
+
+        '401':
+          description: Пользователь не авторизован
+
+        '403':
+          description: Доступ запрещён
+
+        '500':
+          description: Внутренняя ошибка сервера
+
+
+  /api/reject-document:
+    post:
+      tags:
+        - Document
+      operationId: Reject document
+      description: Отклонить документ
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                document_id:
+                  type: integer
+                  description: ID документа
+                comment:
+                  type: string
+                  description: Комментарий проверяющего
+
+      responses:
+        '200':
+          description: Успех
+
+        '400':
+          description: Ошибка
+
+        '401':
+          description: Пользователь не авторизован
+
+        '403':
+          description: Доступ запрещён
+
+        '500':
+          description: Внутренняя ошибка сервера
+
+  /api/get-document-history:
+    get:
+      tags:
+        - Document
+      description: Получить историю изменения документа
+      operationId: Get document history
+
+      parameters:
+        - name: id
+          in: query
+          schema:
+            type: integer
+          required: true
+          description: ID документа
+
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                description: История изменения
+                items:
+                  type: object
+                  properties:
+                    old_status:
+                      type: string
+                      description: Статус до изменения
+                    new_status:
+                      type: string
+                      description: Статус после изменения
+                    comment:
+                      type: string
+                      description: Комментарий
+                    author:
+                      type: string
+                      description: Автор изменения
+                    time:
+                      type: string
+                      format: datetime
+                      description: Время изменения
+
+        '400':
+          description: Ошибка
+
+        '401':
+          description: Пользователь не авторизован
+
+        '403':
+          description: Доступ запрещён
+
+        '500':
+          description: Внутренняя ошибка сервера
+
